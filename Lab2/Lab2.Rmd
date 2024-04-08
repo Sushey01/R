@@ -1,0 +1,253 @@
+---
+title: "R Lab_2_notebook"
+author: "Shekhar Lamichhane Magar"
+output: html_notebook
+---
+
+# variables
+
+task 1: Create variable x and y. Store the product of both variable into z
+and print the value.
+
+```{r}
+x<-2+5
+y<-6
+z<-x*y
+z
+```
+task 2: create variable a, b and c. assign subtraction product in variable
+'a' and store product into b and divide the variable a and b and store the
+value into c.
+```{r}
+a<-10-7
+b<-4
+c<-a/b
+c
+```
+# Functions
+
+Task 1: Create one variable x and assign the c() function into  and give
+these values(100, 200, 300) into function and print the variable x.
+
+```{r}
+x<-c(100, 200, 300)
+x
+
+```
+
+Task 2: Use ? or help() function to understand the particular function.
+
+
+```{r}
+help(c)
+```
+
+
+
+# DataTypes in R
+
+Task 1: create variable x and give the value 5 into x and use the class
+function to check the data type of a variable.
+
+```{r}
+x<-5
+class(x)
+```
+Task 2: Use another class function to check the variable stores value as a
+integer or not.
+
+```{r}
+is.integer(x)
+```
+
+# Vectors, Matrices, Arrays, Lists, and Data Frames.
+
+Task 1: Create a matrix named 'xx' and use the 'matrix()' function and give
+several arguments and values to popi=ulate the matrix from the sequence of 
+integers from 1 to 6. specify the columns and rows in a matrix to 2 and 3.
+
+```{r}
+xx<-matrix(1:6, nrow<-3, ncol<-2)
+xx
+```
+Task 2: Specify the class of matrix.
+
+```{r}
+class(xx)
+```
+Task 3: Specify the value is vector or not.
+
+```{r}
+is.vector(xx)
+```
+Task 4: Specify the value is matrix or not.
+
+```{r}
+is.matrix(xx)
+```
+Task 5: To specify the length.
+
+```{r}
+length(xx)
+```
+Task 6: To understand the dimension(dm) that is row and column.
+
+```{r}
+dim(xx)
+```
+
+# Datasets for apply functions
+
+Task 1: Load the dataset "mtcars" and display the first few rows of the dataset.
+
+```{r}
+data("mtcars")
+head(mtcars)
+```
+
+# apply() function:
+
+## data matrix
+## row/column operation, – 1 for row wise operation, 2 for column wise operation
+## function to be applied on the data.
+
+Task 1: There are 3 arguments and when 'Margin=1' is passed as the second
+parameter and the function max is applied row wise and gives the result.
+
+```{r}
+apply(t(beaver1),1,max)
+
+```
+Task 2: when 'Margin=2' is passed as the second parameters and the function 
+mean is applied column wise.
+
+
+```{r}
+apply(mtcars,2,mean)
+```
+Task 3: Passing Custom function instead of default functions and applying the
+modulus operation.
+
+```{r}
+head(apply(mtcars,2,function(x) x%%10))
+```
+
+# lapply() funtion:
+
+Task 1: Creating a vector of movie titles and using 'lappply()' to convert to 
+lowercase and again checking the structure of the result.
+
+```{r}
+movies <- c("SPYDERMAN","BATMAN","VERTIGO","CHINATOWN")
+movies_lower <-lapply(movies, tolower)
+str(movies_lower)
+
+```
+Task 2: using unlist() to convert the list into a vector.
+
+```{r}
+movies_lower <-unlist(lapply(movies,tolower))
+str(movies_lower)
+```
+# sapply() function:
+
+Task 1: Measure the minimum speed and stopping distances of cars from the cars
+dataset using lapply and sapply.
+
+# sapply function returns a vector.
+
+```{r}
+dt <- cars
+lmn_cars <- lapply(dt, min)
+smn_cars <- sapply(dt, min)
+lmn_cars
+smn_cars
+```
+```{r}
+lmxcars <- lapply(dt, max)
+smxcars <- sapply(dt, max)
+lmxcars
+```
+Task 2: Create custom function named 'avg' that is the average of the minimum 
+and maximum values of a vector then use 'sapply', 'avg()', and 'dt'=dataset.
+
+```{r}
+avg <- function(x) {
+  (min(x) + max(x)) / 2
+}
+
+fcars <- sapply(dt, avg)
+fcars
+```
+
+# Saving and Loading Data
+
+The native data format in R is called RData. For example, let’s use the data
+frame for European countries to store the data on disk.
+
+Task 1: Create a data frame named 'EU' and add some information about 
+European countries' names and population.
+
+```{r}
+EUCountryNames <- c("United Kingdom", "Germany","France","Italy")
+EUPopulation <- c(63843856, 82562004,64982894,61142221)
+EU <- data.frame(EUCountryNames,EUPopulation)
+EU
+```
+Task 2: Storing the data on disk in the native R format RData.
+
+```{r}
+save(EU, file<-"EUInfo.RData")
+```
+Task 3: If we want to see the created file in our working directory 
+then use getwd() function.
+
+```{r}
+getwd()
+```
+
+Task 4: Our Data should be stored in CSV or excel sheets.
+To add or save file in csv and excel then use 
+'write.csv()' and 'write.xlsx()'
+
+```{r}
+write.csv(EU,"EUinfo.csv")
+```
+
+Task 5: To read the file's context from the disk.
+
+```{r}
+EU1 <- read.csv("EUInfo.csv")
+EU1
+```
+
+Task 6: To save data to an excel file should install the package first.
+
+```{r}
+install.packages("xlsx")
+install.packages("readxl")
+library(xlsx)
+library(readxl)
+
+## Loading required package: rJava
+## Loading required package: xlsxjars
+```
+
+Task 7: Now, Store and load the data in 
+Excel format. Use the 'write.xsls(); 
+function to save the data frame to an Excel file.
+
+* eg.  Suppose we have a data frame named 'my.data' and it will save the
+data frame 'my.data' to an Excel file named 'EUInfoNew.xlsx'.
+
+```{r}
+write.xlsx(EU,"EUInfoNew.xlsx",sheetName="Sheet1")
+```
+
+Task 8: Use the 'read.excel()' function to read 
+the Excel file.
+```{r}
+EU3 <- read.xlsx("EUInfoNew.xlsx",sheetName="Sheet1")
+EU3
+```
+
