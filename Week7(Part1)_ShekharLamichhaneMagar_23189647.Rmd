@@ -1,0 +1,191 @@
+---
+title: "Data Manipulation_Lab-7(Part 1)"
+author: "Shekhar Lamichhane Magar"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+## Lab: Data Manipulation
+
+Task: Load and Read yrbss_demo.csv file
+```{r}
+# import libraries
+library(tidyverse)
+
+demo_data <- read_csv("yrbss_demo.csv")
+```
+
+# 1) Filter Rows
+### a) Filter by position
+Task: first 6 rows of demo_data.
+```{r}
+# Brackets method 
+slice(demo_data, 1:6)
+
+# Pipe method
+demo_data %>% slice(1:6)
+```
+
+### Filter by logical criteria
+
+Task: Filter rows with age less than 15
+```{r}
+# Bracket method
+demo_data[demo_data$age<15,]
+
+# Pipe method
+demo_data %>% filter(age<15)
+```
+
+Task: Filter rows using equality
+```{r}
+demo_data %>% filter(sex == "Female")
+demo_data %>% filter(!(grade == "9th"))
+```
+
+Task: Filter rows using OR operator
+```{r}
+demo_data %>% filter((bmi < 15) | (bmi > 50))
+```
+
+Task: Filter rows using %in% operator
+
+```{r}
+demo_data %>% filter(grade %in%  c("10th", "11th"))
+```
+
+Task: Filter rows by multiple-column based criteria
+```{r}
+demo_data %>% filter(bmi < 20, stweight < 50, sex == "Male")
+```
+
+Q1 : Write the code to filter rows with percentage of bmi/stewight <0.5
+```{r}
+demo_data %>% filter((bmi/stweight) < 0.5)
+```
+
+### c ) Filter within a selection of variables
+Task: Create temporary data set named "temp_data" using bmi and stweight
+```{r}
+temp_data <- demo_data %>% select(bmi, stweight)
+```
+
+Task: Filter rows in temp_data where all variables are grater than 2.4
+```{r}
+temp_data %>% filter_all(all_vars(.>2.4))
+```
+
+Task: Filter rows in temp_data where any of the variable are greater than 2.4
+```{r}
+temp_data  %>% filter_all(any_vars(.>2.4))
+```
+
+Task: Filter rows in demo_data where race values are "White."
+```{r}
+demo_data %>% filter_at(vars(starts_with("race")), any_vars(.=="White"))
+```
+
+Task: Filter rows 
+```{r}
+demo_data %>% filter_at(vars(starts_with("race")), any_vars(.=="Asian"))
+```
+
+Task: Filter rows in demo_data which have none NA values for all numeric variables
+```{r}
+demo_data %>% filter_if(is.numeric, all_vars(!is.na(.)))
+```
+
+### d) Select random rows from a data frame 
+
+```{r}
+set.seed(1234)
+# Extract 5 random rows without replacement 
+demo_data %>% sample_n(5, replace = FALSE)
+
+# Extract 5% of rows, randomly without replacement 
+demo_data %>% sample_frac(0.05, replace = FALSE)
+```
+
+### e) Select top n rows ordered by a variable
+Task: Select the top 5 rows ordered by bmi
+```{r}
+demo_data %>% top_n(5, bmi)
+```
+
+Task: Select the top 5 rows ordered by bmi in all
+```{r}
+demo_data %>% group_by(grade) %>% top_n(5, bmi)
+```
+
+# 2) Column operations
+### a) Select columns
+Task: Select columns record, age and sex (or columns from record too sex)
+
+```{r}
+# Brackets
+demo_data[, c("record","age","sex")]
+# Pipes
+demo_data %>% select(record, age, sex)
+demo_data %>% select(record:sex)
+```
+
+## Practice exercise
+Q. What is the meaning of each?
+In the first line of code, the columns from 'record' to 'sex' are selected from 'demo_data', and in the second line, 'age' and 'stweight' are selected. The main difference is that even if there is no column with the given name inside 'one_of', it will simply select the ones that are present.
+
+```{r}
+# What is the meaning of each?
+demo_data %>% select(record:sex)
+demo_data %>% select(one_of(c("age","stweight")))
+```
+
+```{r}
+# Select all columns except 'age' and 'sex'
+demo_data %>% select(-age, -sex)
+```
+
+```{r}
+# Select all columns except from 'record' to 'sex'
+demo_data %>% select(-(record:sex))
+```
+
+```{r}
+# Select columns that contain "race"
+demo_data %>% select(contains("race"))
+```
+
+```{r}
+# Select columns that start with "r"
+demo_data %>% select(starts_with("r"))
+```
+
+
+Q2: Explain the meaning of the output of: demo_data %>% select(-contains("r"))?
+ANS: It selects the columns excluding all other containing r
+
+## b) Rename column
+```{r}
+#renames column variables
+demo_data %>% rename(id = record)
+```
+
+
+
+## c) Add a new column
+
+```{r}
+demo_data %>% mutate(height_m = sqrt(stweight / bmi))
+```
+
+
+
+Q3: Check the data frame. Has the new column added? re-write the above command in a way
+to add the column if not.
+ANS: Yes, the column is added.
+
+
+
+
+
+

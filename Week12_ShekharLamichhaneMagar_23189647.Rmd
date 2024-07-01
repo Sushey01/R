@@ -1,0 +1,217 @@
+---
+title: "Text Processing"
+author: "Shekhar Lamichhane Magar"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+# List of String Manipulation Functions
+
+```{r}
+text <- "san francisco"
+typeof(text)
+
+num <- c("24","34","36")
+typeof(num)
+```
+
+• Use sep feature to separate two characters
+```{r}
+var3 <- paste("Var1","Var2",sep="-")
+var3
+```
+• Create 5 vectors and separate with ? and ! alternatively
+```{r}
+paste(1:5,c("?","!"),sep = "-")
+paste
+```
+
+```{r}
+text = "England"
+cat (text, "USA", sep = "-")
+```
+
+```{r}
+cat(month.name[1:5],sep=" ")
+```
+
+• Convert vectors to string
+```{r}
+toString(1:10)
+```
+
+
+• Load necessary library
+```{r}
+library(stringr)
+str <- "Los Angeles, officially the city of Los Angeles and often known by its initials L.A., is the second-most popular city in the United States (after New York City), the most populous city in California and the county seat of Los Angeles County. Situated in Southern California, Los Angeles is knmown for its Mediterranean climate, ethnic diversity, sprawling metropolis, and as a major center of the American entertainment industry."
+```
+
+• Wrap text
+```{r}
+strwrap(str)
+```
+
+• Convert characters to lower and upper strings
+```{r}
+nchar(str)
+str_length(str)
+
+str_to_lower(str)
+
+str_to_upper(str)
+```
+
+
+```{r}
+# replace letter a,n,d get replaced by f,o,r
+chartr("and", "for", x =str)
+
+# For case sensitive strings
+str_replace_all(string = str, pattern = c("City"), replacement = "state")
+```
+
+
+```{r}
+substr(x=str, start = 5, stop = 11)
+
+setdiff(c("monday", "tuesday", "wednesday"), c("monday", "thursday", "friday"))
+
+setequal(c("monday", "tuesday", "wednesday"),c("monday", "tuesday", "wednesday"))
+setequal(c("monday", "thursday", "friday"),c("monday", "thursday", "friday"))
+```
+
+• Abbreviate with a minimun length of 3
+```{r}
+abbreviate(c("monday","tuesday","wednesday"),minlength = 3)
+
+#split string
+strsplit(x = c("ID-101", "ID-102", "ID-103", "ID-104"),split = "-")
+
+str_split(string = c("ID-101", "ID-102", "ID-103","ID-104"),pattern = "-", simplify = T)
+```
+
+Find and replace first match
+```{r}
+
+sub(pattern = "L", replacement = "B", x = str,ignore.case = T)
+
+#find and replace all matches
+gsub(pattern = "Los", replacement = "Bos", x = str,ignore.case = T)
+```
+
+## Meta characters
+
+
+```{r}
+dt <- c("20", "20$")
+grep(pattern = "20\\$",x=dt, value = T)
+```
+
+```{r}
+dt <- c("may?","money$", "and&")
+gsub(pattern = "[\\?-\\$-\\&]", replacement = "", x =dt)
+```
+
+```{r}
+gsub(pattern = "\\\\", replacement = "-", x = "Barcelona\\Spain")
+```
+
+```{r}
+dt <- c("may?", "money$", "and$")
+grep(pattern = "\\m", x = dt, value = T)
+```
+
+## Quantifiers
+
+```{r}
+names <- c("anna", "crissy", "puerto", "cristian", "garcia", "steven","alex", "rudy")
+
+# doesn't matter if e is a match
+grep(pattern = "e*",x=names,value = T)
+
+#must match t one or more time
+grep(pattern = "t+", x = names,value = T)
+
+#must match n two times
+grep(pattern = "n(2)",x=names, value = T)
+```
+
+## sequence
+
+```{r}
+str <- "I have been to Paris 20 times"
+
+#match a digit
+gsub(pattern = "\\d+", replacement = "_",x =str)
+regmatches(str, regexpr(pattern = "\\d+", text = str))
+
+# match a non digit
+gsub(pattern = "\\D+", replacement = "_",x =str)
+regmatches(str, regexpr(pattern = "\\D+", text = str))
+
+#match a space - returns position
+#grepexpr(pattern = "\\s+", text = str)
+
+#match a non space
+gsub(pattern = "\\S+", replacement = "app", x= str)
+
+#match a word character
+gsub(pattern = "\\w", replacement = "k", x = str)
+
+# match a non word character
+gsub(pattern = "\\W", replacement = "k",x=str)
+```
+
+# Character classes
+
+```{r}
+str <- "20 people got killed in a mob attack. 14 got severly injured"
+
+#extract numbers
+regmatches(x = str, gregexpr("[0-9]+", text = str))
+
+# extract without digits
+regmatches(x = str, gregexpr("[^0-9]+", text = str))
+```
+  
+```{r}
+str<- c("cat.", "896.", "?=+.", "abc1")
+grepl(pattern = "...\\.", x =str)
+```
+  
+```{r}
+str <-c("aaaabc", "aabbbc", "aacc", "a")
+grepl(pattern = "a+b*c", x =str)
+```
+```{r}
+str <- c("warzzzzup", "wazzzup", "wazup")
+grepl(pattern = "waz(3,4)up", x =str)
+```
+
+```{r}
+str<- c("A. B", "c! d", "e f", "g. H3", "i> J", "k L")
+grep(pattern = "[a-z]\\.?\\s+[A-Z]\\d*", x=str)
+```
+
+```{r}
+str <- c("09/01/2016", "09/21/16", "12/25/2016", "12/06/16")
+grep(pattern = "^([0-2][0-9]|(3)[0-1])(\\/)((0)[0-9}|(1)[0-2])(\\/)\\d(4)$", x=str)
+```
+
+```{r}
+dt <- c("75 to 79", "80 to 84", "85 to 89")
+```
+
+```{r}
+    first_values <- grep("^(75|80|85)", dt, value = TRUE)
+
+first_values <- sub("^(\\d+).*", "\\1", first_values)
+
+result <- toString(first_values)
+
+result
+```
+

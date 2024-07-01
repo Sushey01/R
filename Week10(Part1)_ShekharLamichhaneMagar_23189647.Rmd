@@ -1,0 +1,262 @@
+---
+title: "Exploratory data analysis_Lab10(part1)"
+author: "Shekhar Lamichhane Magar"
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+---
+
+Task: Load the csv file
+```{r}
+MS_country_stops <- read.csv("MS_county_stops.csv")
+MS_traffic_stops <- read.csv("MS_trafficstops_bw_age.csv")
+```
+
+## 1) Get data summaries
+Task: Getting data summaries
+```{r}
+str(MS_country_stops)
+```
+
+```{r}
+summary(MS_country_stops)
+```
+
+
+## 2) Plotting with ggplot2
+Task: Importing the necessary library for this project
+```{r}
+# Importing the library
+library("tidyverse")
+```
+
+Task: Using ggplot scatterplot male and female
+
+```{r}
+ggplot(data = MS_country_stops, aes(x = male, y = female)) + geom_point()
+```
+
+Task: Using pipeline operator
+
+```{r}
+MS_country_stops %>% ggplot(aes(x = male, y = female)) + geom_point()
+```
+
+Task: Storing the function in variable and using the same variable to create two plots
+```{r}
+# Assign plot to a variable
+MS_plot <- ggplot(data = MS_country_stops, aes(x = male, y = female))
+
+# Draw the plot with data points
+MS_plot + geom_point()
+
+# Draw the plot using lines
+MS_plot + geom_line()
+```
+
+### a) Scatter plot
+Task: using ggplot for plotting male and female in scatter plot 
+```{r}
+MS_country_stops %>% ggplot(aes(x = male, y = female)) + geom_point()
+```
+
+Task: Using alpha and color for different visuals
+```{r}
+MS_country_stops %>% ggplot(aes(x = male, y = female)) + geom_point(alpha = 0.3, color = "blue")
+```
+
+Task: Adding line to show linear realation
+```{r}
+MS_country_stops %>% ggplot(aes(x = male, y = female)) + geom_point(alpha = 0.3, color = "blue") + geom_abline()
+```
+
+### b) Boxplot
+Task: using boxplot to plot violation clolumn of driver_age dataset
+```{r}
+boxplot(driver_age~violation, data = MS_traffic_stops)
+```
+
+```{r}
+boxplot(driver_age~violation, data = MS_traffic_stops, las = 2)
+```
+
+Task: Let’s see how to draw boxplots using the ggplot function.
+```{r}
+MS_traffic_stops %>% ggplot(aes(x = violation, y = driver_age)) + geom_boxplot()
+```
+
+Task: Filtering missing value and drawing boxplot
+```{r}
+# Filter missing values of driver_age
+filtered_MS_traffic_stops <- MS_traffic_stops %>% filter(!is.na(driver_age)) 
+
+# Draw boxplot
+ggplot(filtered_MS_traffic_stops, aes(x = violation, y = driver_age)) + geom_boxplot()
+```
+
+Task: Storing data in variable 
+```{r}
+Yazoo_stops <- MS_traffic_stops %>% filter(county_name == "Yazoo County", !is.na(driver_age))
+```
+
+Task: overlapping two plots box plot and point plot
+```{r}
+Yazoo_stops %>% ggplot(aes(x = violation, y = driver_age)) + geom_boxplot() + geom_point()
+```
+
+Task: overlapping two plots box plot and jitter to avoid the contraction of points in single line
+```{r}
+Yazoo_stops %>% ggplot(aes(x = violation, y = driver_age)) + geom_boxplot() + geom_jitter()
+```
+
+Task: using color and alpha
+```{r}
+Yazoo_stops %>% ggplot(aes(x = violation, y = driver_age)) + geom_boxplot() + geom_jitter(alpha = 0.5, color = "tomato")
+```
+
+Task: overlapping boxplot over the point
+```{r}
+Yazoo_stops %>% ggplot(aes(x = violation, y = driver_age)) + geom_jitter(alpha = 0.5, color = "tomato") + geom_boxplot()
+```
+
+Task:  using alpha to see both 
+```{r}
+Yazoo_stops %>% ggplot(aes(x = violation, y = driver_age)) + geom_jitter(alpha = 0.5, color = "tomato") + geom_boxplot(alpha = 0)
+```
+
+
+### c) Histograms
+Task: plotting in histogram
+```{r}
+MS_traffic_stops$driver_age %>% hist(col="gold")
+```
+
+Task: using col and fill to make different visual
+```{r}
+MS_traffic_stops %>% ggplot(aes(driver_age)) + geom_histogram(col = "red", fill = "green", alpha = 0.2)
+```
+Task: Defining  count and using break sequence with lower and upper bound and bin range in histogram.
+
+```{r}
+# Define bin count 
+ggplot(MS_traffic_stops, aes(driver_age)) + geom_histogram(col = "red", fill = "green", alpha=0.2, bins = 20)
+
+# Use break sequence with lower bound, upper bound and bin range
+ggplot(MS_traffic_stops, aes(driver_age)) + geom_histogram(col = "red", fill = "green", alpha = 0.2, breaks = seq(10, 50, by=2))
+```
+
+Task: Adding title and coustomiaing x and y label
+```{r}
+ggplot(MS_traffic_stops, aes(driver_age)) + geom_histogram(col="red", 
+fill="green", alpha=0.2, breaks=seq(10, 50, by=2)) + labs(title="Histogram for 
+Age", x="Age", y="Count")
+```
+
+Task: using gradient
+```{r}
+ggplot(MS_traffic_stops, aes(driver_age)) + geom_histogram(alpha=0.2, 
+breaks=seq(10, 50, by=2), col="red", aes(fill=..count..)) +
+scale_fill_gradient("Count", low="green", high="red")
+```
+
+
+### d) Bar charts/ Bar plots
+Task: Displaying frequency of each category and drawing bar chart
+```{r}
+# Display the frequency of each category
+table(MS_traffic_stops$violation)
+
+# Draw bar chart
+barplot(table(MS_traffic_stops$violation),col = "red", main="Number of
+violations")
+
+```
+
+Task: Using barplot
+```{r}
+ggplot(MS_traffic_stops, aes(violation)) + geom_bar()
+```
+
+Task: using fill
+```{r}
+ggplot(MS_traffic_stops, aes(violation)) + geom_bar(fill = "green")
+```
+
+Q2: What will happen if you use “col” instead of “fill”?
+Ans: The border of the bar will be green.
+
+
+Task: using fill in aes to see male and female in same plot 
+```{r}
+MS_traffic_stops %>% ggplot(aes(violation)) + geom_bar(aes(fill = driver_gender))
+```
+
+Task: using fill in aes to see male and female in same plot 
+```{r}
+MS_traffic_stops %>% ggplot(aes(violation)) + geom_bar(aes(fill = driver_gender), position = "fill")
+```
+
+Task: using fill in aes to see male and female in same plot in vertical
+```{r}
+MS_traffic_stops %>% ggplot(aes(violation)) + geom_bar(aes(fill = driver_gender), position = "fill") + coord_flip()
+```
+
+Q3: From your graphs, do you think male are likely to break lights than
+females? How about speeding?
+Ans:  Yes, I think male are likely to break lights than females and also for speeding.
+
+
+## 3) Correlation Analysis
+
+```{r}
+movies <- read.csv("movies.csv")
+```
+
+### a) Graphical Analysis
+ 
+```{r}
+movies %>% ggplot( aes(x=revenue, y=budget)) + geom_point(alpha = 0.3, color = "blue") + geom_abline()
+```
+
+### b) Quantitative Analysis
+Task: Getting quantative analysis
+```{r}
+cor(movies$vote_average, movies$revenue)
+```
+
+### c) Correlation Matrix 
+Task: correlation plot
+```{r}
+# Install.packages("GGally")
+# Load package
+library(GGally)
+# Generate correlation matrix
+ggcorr(movies)
+```
+
+Q4: what is the correlation between vote_count and runtime?
+Ans: There is positive correlation between vote_count and runtime.
+
+Task: correlation plot and also value
+```{r}
+ggcorr(movies, label=TRUE, label_alpha = 0.3)
+```
+
+Task: Creating scatter plot more relation.
+
+```{r}
+ggplot(data = movies, aes(x = revenue, y = vote_count)) + geom_point(alpha=0.3, color = "blue")
+```
+
+Task: Adding trend line to make it even clear relation between variables.
+```{r}
+qplot(movies$revenue, movies$vote_count, data=movies , geom= c("point",
+"smooth" ), method= "lm", alpha= I (1/5), se= FALSE)
+
+```
+
+Q5: What is the correlation type shown in the resulted plot?
+Ans: The correlation type shown in the resulting plot is a linear correlation.
+

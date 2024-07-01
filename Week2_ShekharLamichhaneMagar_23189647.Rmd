@@ -1,0 +1,168 @@
+---
+title: "Lab-2 Introduction to Data Science"
+author: "Shekhar Lamichhane Magar"
+date: "2024-06-13"
+output: pdf_document
+---
+
+
+# Variables
+
+task 1: Create variables x and y. Assign the prodct of x and y to z.
+```{r}
+x = 2+5
+y = 6
+z = x*y
+z
+```
+task 2: Create variable a and b using arrow. Assign the value of a divided by b and finally print c.  
+```{r}
+a <- 10-7
+b <- 4
+c <- a/b
+c
+```
+# Functions
+Task 3: Create a function x using c() and store some value and print x.
+```{r}
+x = c(100,200,300)
+x
+```
+# Data Types in R
+task 3: Assign a value in x and use class() function to check its data type.
+```{r}
+x = 5
+class(x)
+
+```
+task 4: Use is.integer() function to check if it is integer.
+```{r}
+is.integer(x)
+```
+# Vectors, Matrices, Arrays, Lists, and Data Frames
+task 5: Create matrix xx and print it.
+```{r}
+xx = matrix(1:6, nrow=3, ncol=2)
+xx
+```
+task 6: Use class() is.vector() is.matrix(), length(), dim() functions to check class length and number of rows and column.
+```{r}
+class(xx)
+is.vector(xx)
+is.matrix(xx)
+length(xx)
+dim(xx)
+```
+# Datasets for apply family tutotial
+task 7: Load pre-built data named "mtcars" and use head() function to see some rows and columns of data.
+
+```{r}
+data("mtcars")
+head(mtcars)
+```
+task 8: Use apply function to apply max row wise.
+
+```{r}
+apply (t(beaver1),1,max)
+```
+task 9: Use apply function in mtcars dataset to find mean column wise by passing 2 in second parameter.
+```{r}
+apply(mtcars, 2, mean)
+```
+task 10: Use apply() function in head of matcars dataset column wise and apply function x which gives reminder.
+```{r}
+head(apply(mtcars, 2, function(x) x%%10))
+```
+# lapply() function
+
+task 11: Make variable named movies and use lapply() function and pass tolower parameter to movise variable.
+```{r}
+movies <- c("SPYDERMAN","BATMAN","VERTIGO","CHINATOWN")
+movies_lower <- lapply(movies, tolower)
+str(movies_lower)
+```
+task 12: Use unlist() function to convert the list into a vector.
+```{r}
+movies_lower <- unlist(lapply(movies, tolower))
+str(movies_lower)
+```
+# sapply() function
+
+task 13: Use sapply() function that takes list, vector or data frame as input and gives output in vector or matrix.
+```{r}
+dt <- cars
+lmn_cars <- lapply(dt, min)
+smn_cars <- sapply(dt, min)
+lmn_cars
+```
+```{r}
+lmxcars <- lapply(dt, max)
+smcars <- sapply(dt, max)
+lmxcars
+```
+task 14: Create a function avg and pass this function in sapply to get the result.
+```{r}
+avg <- function(x) {
+  (min(x) + max(x)) / 2}
+fcars <- sapply(dt, avg)
+fcars
+```
+# Saving and Loading Data
+task 15: Create two vectors and convert it into data frame.
+```{r}
+EUCountryNames = c("United Kingdom", "Germany","France","Italy")
+EUPopulation = c(324542,243234524,2345452,234522345)
+EU = data.frame(EUCountryNames, EUPopulation)
+EU
+```
+```{r}
+save(EU, file = "EUInfo.RData")
+```
+task 16: Use getwd() function
+```{r}
+getwd()
+```
+task 17: Load the data
+```{r}
+rm(EU)
+load("EUInfo.RData")
+EU
+```
+task 18: Convert the data into csv file
+```{r}
+write.csv(EU,"EUInfo.csv")
+```
+
+task 19: load the csv file
+```{r}
+EU2 = read.csv("EUInfo.csv")
+EU2
+```
+task 20: install xlsx
+```{r}
+library(xlsx)
+
+```
+task 21: convert into xlsx format
+```{r}
+write.xlsx(EU, "EUInfoNew.xlsx", sheetName="Sheet1")
+```
+task 22: load the file 
+```{r}
+EU3 = read.xlsx("EUInfoNew.xlsx", sheetName="Sheet1")
+EU3
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

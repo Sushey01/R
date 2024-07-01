@@ -1,0 +1,151 @@
+---
+title: "K-Mean Clustering"
+author: "Shekhar Lamichhane Magar"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+# Problem and Targeted Solution
+
+* Apply K-means clustering approach to identify customer groups
+
+Task 1: Install and import necessary packages
+
+```{r}
+# Set CRAN mirror
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
+
+# Install required packages
+if (!require(ggplot2)) {
+  install.packages("ggplot2")
+}
+if (!require(factoextra)) {
+  install.packages("factoextra")
+}
+
+# Load the packages
+library(ggplot2)
+library(factoextra)
+
+```
+* Load packages and use them
+
+```{r}
+library(ggplot2)
+library(factoextra)
+```
+Task 2: Set random seed
+
+```{r}
+# Set random seed
+set.seed(7696)
+```
+Task 3: Load Data
+
+* Create a folder for today's lab and copy the data file(.csv file) into the folder.
+* Setup the folder you created as Rstudio's working directory as we discussed during previous lab sessions.
+
+```{r}
+# Load data
+data <- read.csv("Mall_Customers.csv")
+```
+
+Task 4:  K-means clustering using 2 attributes; “Annual_Income” and “Spending_Score”
+
+Let’s cluster customers into 5 groups using the attributes “Annual_Income” and“Spending_Score”.
+a) Filter targeted attributes
+Create a new data frame, which only contains the columns “Annual_Income” and“Spending_Score”
+
+```{r}
+# filter data by column name
+filtered_data1 <- data[, c("Annual_Income","Spending_Score")]
+```
+
+b) Visualise data
+See how the data points are located in the space using a scatter plot to get anunderstanding about
+the data you are going to cluster
+
+```{r}
+# Draw a scatter plot
+ggplot(data, aes(x = Annual_Income, y = Spending_Score) ) + geom_point()
+```
+
+c) Apply K-means clustering
+Initially we need to define a value for K (number of clusters).Since
+out target is to find 5 customer groups, K = 5.
+
+```{r}
+# Find 5 clusters using K-means clustering
+clusters <- kmeans(filtered_data1, 5)
+# View cluster details
+clusters
+```
+
+Q1: What can you tell about the customer groups you obtained?
+
+d) Visualise clusters
+
+```{r}
+# Extract cluster indices
+cluster_index <- as.factor(clusters$cluster)
+# View cluster details
+ggplot(filtered_data1, aes(x = Annual_Income, y = Spending_Score, color =
+cluster_index)) + geom_point()
+
+```
+
+Task 5: K-means clustering using more attributes; “Age”, “Annual_Income” and
+“Spending_Score”.
+ 
+a) Filter targeted attributes
+Create a new data frame which only contains the
+columns “Age”, “Annual_Income” and“Spending_Score”.
+
+```{r}
+# filter data by column name
+filtered_data2 <- data[, c("Age", "Annual_Income","Spending_Score")]
+```
+
+b) Apply K-means clustering
+Similarly, as before, we can apply clustering to new data frame (filtered_data2).
+
+```{r}
+# Find 5 clusters using K-means clustering
+clusters2 <- kmeans(filtered_data2, 5)
+# View cluster details
+clusters2
+```
+
+Q2: What can you tell about the customer groups by considering all 3 attributes?
+c) Visualise clusters
+Now, our clusters are in 3-dimensional spacewith the dimensions “Age”,“Annual_Income”and
+“Spending_Score”. Thus, we cannot simply use the above graph generation method.
+There are methods which helps us to map multidimensional spaces with more than 2dimensions into 2 
+dimensional spaces for visualisation purpose.
+
+```{r}
+# Visualise clusters in 3 or high dimensional spaces
+fviz_cluster(clusters2, data = filtered_data2, geom = c("point"))
+```
+
+6) Overcome initial centroid problem
+As we discussed, having multiple runs is the simplest way which help
+overcoming initial centroid problem.
+Just adding 1 argument (nstart) to the function, you can have multiple runs.
+
+```{r}
+# Find 5 clusters using K-means clustering
+clusters3 <- kmeans(filtered_data2, 5, nstart = 25)
+# View cluster details
+clusters3
+# Visualise clusters in 3 or high dimensional spaces
+fviz_cluster(clusters3, data = filtered_data2, geom = c("point"))
+```
+
+* Note:
+a) nstart = 25 means, you are having 25 random initialisations. Final / resulting 
+clusteringwould be the best one.
+
+b) You want see clear difference in your new clusters compared to previous clusters, if the 
+bestclustering is randomly selected already.

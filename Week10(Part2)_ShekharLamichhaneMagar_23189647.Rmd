@@ -1,0 +1,112 @@
+---
+title: "Data Enrichment_Lab10(Part2)"
+author: "Shekhar Lamichhane Magar"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+## Deduplication
+Task: Load the data
+```{r}
+library("tidyverse")
+```
+
+Task: Creating a vector
+```{r}
+x <- c(1,2,4,5,4,6)
+```
+
+Task: checking a duplicated value
+```{r}
+duplicated(x)
+```
+
+Task: Not Get duplicated value from the vector
+```{r}
+x[!duplicated(x)]
+``` 
+
+Task: Filtering non duplicated value of iris dataset on sepal.width column
+```{r}
+iris[!duplicated(iris$Sepal.Width), ]
+```
+
+### Remove duplicate rows in a data frame
+Task: checking distinct values
+```{r}
+iris %>% distinct()
+```
+
+Task: removing duplicated rows on sepal.length
+```{r}
+# Remove duplicated rows based on Sepal.Length
+iris %>% distinct(Sepal.Length, .keep_all = TRUE)
+```
+
+```{r}
+# Remove duplicated rows based on Sepal.Length and Petal.Width
+iris %>% distinct(Sepal.Length, Petal.Width, .keep_all = TRUE)
+
+```
+
+### Summary
+In this section, we describe key functions for identifying and removing duplicate data:
+• Remove duplicate rows based on one or more column values: my_data %>% distinct(Sepal.Length)
+• R base function to extract unique elements from vectors and data frames: unique(my_data)
+• R base function to determine duplicate elements: duplicated(my_data)
+
+
+## 2) Grouping
+
+Task: creating the variable by storing group of species of iris dataset
+```{r}
+# First, we have to define which column we are going to use to group. 
+# In this case we use the species of the plant.
+my_group <- group_by(iris, Species)
+
+# Now using "summarize_all", we define which function we use to group the values. for an example we can use mean.
+summarize_all(my_group, funs(mean))
+```
+
+Task: Load the survey data
+```{r}
+# Load survey data set
+surveys <- read.csv("survey.csv")
+```
+
+Task: grouping surveys by sex and adding mean_weight column to get mean and also removing null values
+```{r}
+surveys %>%
+  group_by(sex) %>% 
+  summarize(mean_weight = mean(wgt, na.rm = TRUE))
+
+```
+
+Task: grouping by sex and species
+```{r}
+surveys %>%
+group_by(sex, species) %>%
+summarize(mean_weight = mean(wgt, na.rm = TRUE))
+```
+
+Task: grouping by sex and species and creating mean_weight to store mean
+```{r}
+surveys %>%
+  group_by(sex, species) %>%
+  summarize(mean_weight = mean(wgt, na.rm = TRUE))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
